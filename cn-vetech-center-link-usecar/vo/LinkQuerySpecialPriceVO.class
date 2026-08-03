@@ -1,0 +1,98 @@
+package cn.vetech.center.link.usecar.vo;
+
+import org.vetech.core.modules.utils.mapper.JsonMapper;
+
+import java.math.BigDecimal;
+import java.util.List;
+
+/**
+ * 专快车询价返回
+ * Created by vetech on 2017/10/16.
+ * @author  zhouyan
+ */
+public class LinkQuerySpecialPriceVO extends LinkUseCarBaseVO {
+    /**
+     * 询价里程预计里程数(米)
+     */
+    private BigDecimal distance;
+    /**
+     * 询价里程预计时长数(分钟)
+     */
+    private BigDecimal duration;
+    /**
+     * 具体车型组询价结果
+     */
+    private List<LinkSpecialPriceVO> priceList;
+
+    /**
+     * 游标Id，异步加载查询时返回
+     */
+    private String cursorId;
+
+    /**
+     *  默认查询完成,异步加载查询时返回
+     */
+    private Boolean finishFlag;
+
+    /**
+     * 供应商产品缓存时间
+     */
+    private String cacheTimeout;
+
+    public String getCacheTimeout() {
+        return cacheTimeout;
+    }
+
+    public void setCacheTimeout(String cacheTimeout) {
+        this.cacheTimeout = cacheTimeout;
+    }
+
+    public Boolean getFinishFlag() {
+        return finishFlag;
+    }
+
+    public void setFinishFlag(Boolean finishFlag) {
+        this.finishFlag = finishFlag;
+    }
+
+    public String getCursorId() {
+        return cursorId;
+    }
+
+    public void setCursorId(String cursorId) {
+        this.cursorId = cursorId;
+    }
+
+    public BigDecimal getDistance() {
+        return distance;
+    }
+
+    public void setDistance(BigDecimal distance) {
+        this.distance = distance;
+    }
+
+    public BigDecimal getDuration() {
+        return duration;
+    }
+
+    public void setDuration(BigDecimal duration) {
+        this.duration = duration;
+    }
+
+    public List<LinkSpecialPriceVO> getPriceList() {
+        return priceList;
+    }
+
+    public void setPriceList(List<LinkSpecialPriceVO> priceList) {
+        this.priceList = priceList;
+    }
+
+    @Override
+    public String toString() {
+        try {
+            return JsonMapper.nonEmptyMapper().toJson(this);
+        }catch (Exception e){
+            return "无法反序列化对象";
+        }
+    }
+}

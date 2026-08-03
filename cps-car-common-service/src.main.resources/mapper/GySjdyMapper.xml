@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.vetech.center.car.mapper.GySjdyMapper">
+    <resultMap id="gySjdyResultMap" type="gySjdy">
+        <id property="id" column="id" />
+        <result property="gySjbh" column="gy_sjbh"/>
+        <result property="gySjmc" column="gy_sjmc"/>
+        <result property="gyShbh" column="gy_shbh"/>
+        <result property="sjmc" column="sjmc"/>
+    </resultMap>
+    <!--根据分组id获取商户组明细-->
+    <select id="selectPtmcList" resultMap="gySjdyResultMap"  parameterType="java.util.Map">
+        select * from gy_sjdy
+        <where>
+            sjlx = 5 and
+            gy_sjbh in
+            <foreach collection="corpIds" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </where>
+    </select>
+    <update id="updateCancelLimit">
+        UPDATE gy_sjdy g SET g.cancel_limit = #{dto.cancelLimit} WHERE  sjlx = 4  and id in
+        <foreach collection="dto.ids" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+</mapper>

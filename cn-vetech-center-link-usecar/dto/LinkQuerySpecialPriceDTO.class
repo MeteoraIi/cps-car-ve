@@ -1,0 +1,101 @@
+package cn.vetech.center.link.usecar.dto;
+import io.swagger.annotations.ApiModelProperty;
+import org.vetech.core.modules.utils.mapper.JsonMapper;
+
+import java.util.List;
+
+/**
+ * 专车询价标准入参
+ * Created by vetech on 2017/10/16.
+ * @author chenjunfeng
+ */
+public class LinkQuerySpecialPriceDTO extends LinkUseCarBaseDTO {
+    /**
+     * 车型组编号,不传入检索所有的（目前这个字段是备用，不需要传入）
+     */
+    private String cxzbh;
+    /**出发地城市id，多个商户就从中间表取其对应的城市id，没有的话也占位，数量和商户id保持一致**/
+    private String cfdCsid;
+    /**出发城市名称，只传入CPS标准城市名称(本地的)*/
+    private String cfdCsmc;
+    /**出发地名称(如家酒店)*/
+    private String cfdMc;
+    /**出发地详细地址(嵩山大道2289号)*/
+    private String cfdXxdz;
+    /**目的地城市id，多个商户就从中间表取其对应的城市id，没有的话也占位，数量和商户id保持一致**/
+    private String mddCsid;
+    /**目的地城市名称，只传入CPS标准城市名称(本地的)*/
+    private String mddCsmc;
+    /**目的地名称(顺丰快递)*/
+    private String mddMc;
+    /**出发地详细地址(乔心街39号)*/
+    private String mddXxdz;
+    /** (用车时间(2016/1/21 15:30 精确到小时分钟))**/
+    private String ycsj;
+    /**专车始发经度(专车) 高德地图**/
+    private String cfdX;
+    /**专车始发纬度(专车) 高德地图**/
+    private String cfdY;
+    /**专车目的地经度(专车) 高德地图**/
+    private String mddX;
+    /**专车目的地纬度(专车) 高德地图**/
+    private String mddY;
+    /**soso出发地经度**/
+    private String sosoCfdX;
+    /**soso出发地维度**/
+    private String sosoCfdY;
+    /**soso目的地经度**/
+    private String sosoMddX;
+    /**soso目的地维度**/
+    private String sosoMddY;
+    /**计价模式类别 201专车 301快车(滴滴特有的)
+     * 如果传入只检索传入类型的，如果为空，link会请求专车和快车的*/
+    private String jjmslb;
+
+    /**
+     * 需支持国际手机号
+     */
+    @ApiModelProperty(value = "需支持国际手机号", example = "")
+    private String sfzcGjbm;
+
+    private String cxrsj;
+
+    private String ddEnableModifyDestination;
+
+    private Long timeout;
+
+    /**
+     * 游标id,异步查询时使用
+     */
+    private String cursorId;
+    /**
+     * 异步加载查询
+     */
+    private String asyn;
+    /**
+     * 最晚计划出发时间
+     */
+    @ApiModelProperty(value = "最晚计划出发时间", example = "2025-12-20 10:22")
+    private String endPlanStartTime;
+    /**
+     * 乘坐人数
+     */
+    @ApiModelProperty(value = "乘坐人数", example = "4")
+    private Integer paxNum;
+
+    /**
+     * 是否全量数据
+     */
+    private boolean queryAll;
+
+        @Override
+    public String toString() {
+        try {
+            return JsonMapper.nonEmptyMapper().toJson(this);
+        }catch (Exception e){
+            return "无法反序列化对象";
+        }
+    }
+
+    // 后面全是 get set    
+}

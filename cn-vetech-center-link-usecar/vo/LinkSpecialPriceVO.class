@@ -1,0 +1,356 @@
+package cn.vetech.center.link.usecar.vo;
+
+import io.swagger.annotations.ApiModelProperty;
+import org.vetech.core.modules.utils.mapper.JsonMapper;
+
+import java.math.BigDecimal;
+
+/**
+ * 具体车型组询价结果
+ * Created by vetech on 2017/10/16.
+ * @author zhouyan
+ */
+public class LinkSpecialPriceVO {
+    /**供应商编号**/
+    private String gysbh;
+    /**供应商编号**/
+    private String gysmc;
+    /**车型组编号**/
+    private String cxzbh;
+    /**车型组名称2017年12月26日10:48:14 这个字段的值已作废，新CPS会通过cxzbh去检索**/
+    private String cxzmc;
+    /**外部(供应商)车型组编号**/
+    private String wbcxzbh;
+    /**外部(供应商)车型组名称**/
+    private String wbcxzmc;
+    /**报价**/
+    private BigDecimal ygje;
+    /**CPMS）产品描述**/
+    private String cpms;
+    /**价格md5,通过 新的预估价接口获得**/
+    private String jgmd5;
+    /**计价模式类别：201 专车，301快车*/
+    private String jjmslb;
+    /**出发地经度(值大的)**/
+    private String cfdx;
+    /**出发地维度(值小的)**/
+    private String cfdy;
+    /**目的地经度(值大的)**/
+    private String mddx;
+    /**目的地维度(值小的)**/
+    private String mddy;
+    /**座位数**/
+    private String zws;
+    /**真实供应商名称**/
+    private String corpId;
+    /**
+     * 车型图标名称
+     */
+    private String brandIconUrl;
+    /**
+     * 供应商下单类型 0或空-单个下单 1-批量下单
+     */
+    private String supplierBookType;
+    /**
+     * 供应商是否可修改目的地标识，0-不可修改 1-可修改
+     */
+    private String destinationChangeable;
+    /**
+     * 预估价格明细
+     */
+    private String priceDetail;
+
+    private String cpsCacheId;
+
+    /**
+     *  原始供应商名称
+     */
+    private String ysGysmc;
+    /**
+     *  原始供应商编号
+     */
+    private String ysGysbh;
+
+    private String sfykj;
+
+    /**
+     * 展示一口价标识，滴滴特有 0：不展示，1：展示
+     */
+    private String showYkjFlag;
+
+    /**
+     * 实际供应商编号
+     */
+    @ApiModelProperty(value = "实际供应商编号", dataType = "string")
+    private String actualSupplierNo;
+    /**
+     * 可修改的次数
+     */
+    private String modifyDestCount;
+
+    public String getModifyDestCount() {
+        return modifyDestCount;
+    }
+
+    public void setModifyDestCount(String modifyDestCount) {
+        this.modifyDestCount = modifyDestCount;
+    }
+
+    public String getActualSupplierNo() {
+        return actualSupplierNo;
+    }
+
+    public void setActualSupplierNo(String actualSupplierNo) {
+        this.actualSupplierNo = actualSupplierNo;
+    }
+
+    public String getShowYkjFlag() {
+        return showYkjFlag;
+    }
+
+    public void setShowYkjFlag(String showYkjFlag) {
+        this.showYkjFlag = showYkjFlag;
+    }
+
+    public String getSfykj() {
+        return sfykj;
+    }
+
+    public void setSfykj(String sfykj) {
+        this.sfykj = sfykj;
+    }
+
+    public String getYsGysmc() {
+        return ysGysmc;
+    }
+
+    public void setYsGysmc(String ysGysmc) {
+        this.ysGysmc = ysGysmc;
+    }
+
+    public String getYsGysbh() {
+        return ysGysbh;
+    }
+
+    public void setYsGysbh(String ysGysbh) {
+        this.ysGysbh = ysGysbh;
+    }
+
+    public String getCpsCacheId() {
+        return cpsCacheId;
+    }
+
+    public void setCpsCacheId(String cpsCacheId) {
+        this.cpsCacheId = cpsCacheId;
+    }
+
+    public String getPriceDetail() {
+        return priceDetail;
+    }
+
+    public void setPriceDetail(String priceDetail) {
+        this.priceDetail = priceDetail;
+    }
+
+    public String getDestinationChangeable() {
+        return destinationChangeable;
+    }
+
+    public void setDestinationChangeable(String destinationChangeable) {
+        this.destinationChangeable = destinationChangeable;
+    }
+
+    public String getSupplierBookType() {
+        return supplierBookType;
+    }
+
+    public void setSupplierBookType(String supplierBookType) {
+        this.supplierBookType = supplierBookType;
+    }
+
+    public String getBrandIconUrl() {
+        return brandIconUrl;
+    }
+
+    public void setBrandIconUrl(String brandIconUrl) {
+        this.brandIconUrl = brandIconUrl;
+    }
+
+    public String getCorpId() {
+        return corpId;
+    }
+
+    public void setCorpId(String corpId) {
+        this.corpId = corpId;
+    }
+
+    public String getZws() {
+        return zws;
+    }
+
+    public void setZws(String zws) {
+        this.zws = zws;
+    }
+
+    /**
+     * 获取供应商编号
+     * @return gysbh 供应商编号
+     */
+    public String getGysbh() {
+        return gysbh;
+    }
+    /**
+     * 设置供应商编号
+     * @param gysbh 供应商编号
+     */
+    public void setGysbh(String gysbh) {
+        this.gysbh = gysbh;
+    }
+    /**
+     * 获取供应商编号
+     * @return gysmc 供应商编号
+     */
+    public String getGysmc() {
+        return gysmc;
+    }
+    /**
+     * 设置供应商编号
+     * @param gysmc 供应商编号
+     */
+    public void setGysmc(String gysmc) {
+        this.gysmc = gysmc;
+    }
+    /**
+     * 获取车型组编号
+     * @return cxzbh 车型组编号
+     */
+    public String getCxzbh() {
+        return cxzbh;
+    }
+    /**
+     * 设置车型组编号
+     * @param cxzbh 车型组编号
+     */
+    public void setCxzbh(String cxzbh) {
+        this.cxzbh = cxzbh;
+    }
+
+        /**
+     * 获取车型组名称
+     * 2017年12月26日10:48:14 这个字段的值已作废，新CPS会通过cxzbh去检索
+     * @return cxzmc 车型组名称
+     */
+    @Deprecated
+    public String getCxzmc() {
+        return cxzmc;
+    }
+    /**
+     * 设置车型组名称
+     * 2017年12月26日10:48:14 这个字段的值已作废，新CPS会通过cxzbh去检索
+     * @param cxzmc 车型组名称
+     */
+    @Deprecated
+    public void setCxzmc(String cxzmc) {
+        this.cxzmc = cxzmc;
+    }
+    /**
+     * 获取(CPMS）产品描述
+     * @return cpms (CPMS）产品描述
+     */
+    public String getCpms() {
+        return cpms;
+    }
+    /**
+     * 设置(CPMS）产品描述
+     * @param cpms (CPMS）产品描述
+     */
+    public void setCpms(String cpms) {
+        this.cpms = cpms;
+    }
+    /**
+     * 获取201专车，301快车
+     * @return jjmslb
+     */
+    public String getJjmslb() {
+        return jjmslb;
+    }
+    /**
+     * @param jjmslb 设置[ 201专车，301快车 ]
+     */
+    public void setJjmslb(String jjmslb) {
+        this.jjmslb = jjmslb;
+    }
+
+    public BigDecimal getYgje() {
+        return ygje;
+    }
+
+    public void setYgje(BigDecimal ygje) {
+        this.ygje = ygje;
+    }
+
+    public String getJgmd5() {
+        return jgmd5;
+    }
+
+    public void setJgmd5(String jgmd5) {
+        this.jgmd5 = jgmd5;
+    }
+
+    public String getCfdx() {
+        return cfdx;
+    }
+
+    public void setCfdx(String cfdx) {
+        this.cfdx = cfdx;
+    }
+
+    public String getCfdy() {
+        return cfdy;
+    }
+
+    public void setCfdy(String cfdy) {
+        this.cfdy = cfdy;
+    }
+
+    public String getMddx() {
+        return mddx;
+    }
+
+    public void setMddx(String mddx) {
+        this.mddx = mddx;
+    }
+
+    public String getMddy() {
+        return mddy;
+    }
+
+    public void setMddy(String mddy) {
+        this.mddy = mddy;
+    }
+
+    public String getWbcxzbh() {
+        return wbcxzbh;
+    }
+
+    public void setWbcxzbh(String wbcxzbh) {
+        this.wbcxzbh = wbcxzbh;
+    }
+
+    public String getWbcxzmc() {
+        return wbcxzmc;
+    }
+
+    public void setWbcxzmc(String wbcxzmc) {
+        this.wbcxzmc = wbcxzmc;
+    }
+
+    @Override
+    public String toString() {
+        try {
+            return JsonMapper.nonEmptyMapper().toJson(this);
+        }catch (Exception e){
+            return "无法反序列化对象";
+        }
+    }
+}
