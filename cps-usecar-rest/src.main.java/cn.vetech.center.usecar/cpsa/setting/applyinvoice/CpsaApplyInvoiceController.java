@@ -7,12 +7,14 @@ import cn.vetech.center.cps.invoice.api.vo.OpenInvoiceVO;
 import cn.vetech.center.usecar.apiclient.invocie.ICpsaApplyInvoiceServiceClient;
 import cn.vetech.center.usecar.cpsa.CpsaBaseController;
 import cn.vetech.center.usecar.entity.order.YcDd;
+import cn.vetech.center.usecar.entity.usecar.YcDdEx;
 import cn.vetech.center.usecar.entity.usecar.YcDdMain;
 import cn.vetech.center.usecar.entity.usecar.YcKhSjzfxx;
 import cn.vetech.center.usecar.notice.buyer.dto.ApplyInvoiceNotifyDetail;
 import cn.vetech.center.usecar.notice.buyer.dto.UseCarApplyInvoiceNotifyDTO;
 import cn.vetech.center.usecar.notice.buyer.service.BuyerNoticeService;
 import cn.vetech.center.usecar.service.order.YcDdService;
+import cn.vetech.center.usecar.service.usecar.YcDdExService;
 import cn.vetech.center.usecar.service.usecar.YcDdMainService;
 import cn.vetech.center.usecar.service.usecar.YcKhSjzfxxService;
 import com.google.common.collect.Lists;
@@ -56,6 +58,8 @@ public class CpsaApplyInvoiceController extends CpsaBaseController {
      * CPS客服代申请
      */
     public static final String CPS_OPEN_INVOICE = "2";
+    private static final String MAIN_INVOICE_APPLYING = "1";
+    private static final String MAIN_INVOICE_APPLIED = "2";
     /**
      * 日志
      */
@@ -70,6 +74,8 @@ public class CpsaApplyInvoiceController extends CpsaBaseController {
      */
     @Autowired
     private YcDdMainService ycDdMainService;
+    @Autowired
+    private YcDdExService ycDdExService;
     /**
      * 开票服务
      */
@@ -98,6 +104,12 @@ public class CpsaApplyInvoiceController extends CpsaBaseController {
             logger.info("根据订单编号" + ddbh + ",查询数据失败");
             RestResponse resp = new RestResponse();
             resp.setMessage("根据订单编号" + ddbh + ",查询数据失败");
+            resp.setResult(false);
+            return resp;
+        }
+        if (isMainOrderInvoiced(ycDd.getpDdbh())) {
+            RestResponse resp = new RestResponse();
+            resp.setMessage("main order " + ycDd.getpDdbh() + " has applied invoice, child order " + ddbh + " cannot apply again");
             resp.setResult(false);
             return resp;
         }
@@ -170,6 +182,13 @@ public class CpsaApplyInvoiceController extends CpsaBaseController {
             return resp;
         }
 
+        if (isMainOrderInvoiced(ycDd.getpDdbh())) {
+            RestResponse resp = new RestResponse();
+            resp.setMessage("main order " + ddbh + " has applied invoice, cannot apply again");
+            resp.setResult(false);
+            return resp;
+        }
+
         OpenInvoiceDTO invoiceDTO = buildInvoiceDto(ycDd, dto);
         invoiceDTO.setUserId(loginUser.getQyyggh());
         try {
@@ -196,6 +215,13 @@ public class CpsaApplyInvoiceController extends CpsaBaseController {
             //开票成功通知
             UseCarApplyInvoiceNotifyDTO useCarApplyInvoiceNotifyDTO = new UseCarApplyInvoiceNotifyDTO();
             useCarApplyInvoiceNotifyDTO.setCpbh(CPBH);
+            // Persist main invoice status before child orders check it.
+            if (!saveMainInvoiceStatus(ycDd.getpDdbh(), MAIN_INVOICE_APPLIED)) {
+                RestResponse resp = new RestResponse();
+                resp.setMessage("main order " + ddbh + " invoice status update failed");
+                resp.setResult(false);
+                return resp;
+            }
             useCarApplyInvoiceNotifyDTO.setBusinessNo(ycDd.getCgshbh());
             useCarApplyInvoiceNotifyDTO.setCpsDdbh(ycDd.getpDdbh());
             useCarApplyInvoiceNotifyDTO.setGysBh(ycDd.getGyShbh());
@@ -207,6 +233,32 @@ public class CpsaApplyInvoiceController extends CpsaBaseController {
             return new RestResponse<>(false);
         }
         return new RestResponse<>(true);
+    }
+
+    private boolean isMainOrderInvoiced(String pDdbh) {
+        if (StringUtils.isBlank(pDdbh)) {
+            return false;
+        }
+        YcDdEx ycDdEx = ycDdExService.selectBypDdbh(pDdbh);
+        if (ycDdEx == null) {
+            return false;
+        }
+        return StringUtils.equals(MAIN_INVOICE_APPLYING, ycDdEx.getMainInvoiceStatus())
+                || StringUtils.equals(MAIN_INVOICE_APPLIED, ycDdEx.getMainInvoiceStatus());
+    }
+
+    private boolean saveMainInvoiceStatus(String pDdbh, String status) {
+        if (StringUtils.isBlank(pDdbh)) {
+            return false;
+        }
+        YcDdEx ycDdEx = ycDdExService.selectBypDdbh(pDdbh);
+        if (ycDdEx == null) {
+            ycDdEx = new YcDdEx();
+            ycDdEx.setPddbh(pDdbh);
+            ycDdEx.setMainInvoiceStatus(status);
+            return ycDdExService.insertYcDdEx(ycDdEx) > 0;
+        }
+        return ycDdExService.updateMainInvoiceStatus(pDdbh, status) > 0;
     }
 
     /**

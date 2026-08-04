@@ -34,5 +34,15 @@ public class YcDdEx {
 
     private String tjd;
 
+    @TableField("main_invoice_status")
+    private String mainInvoiceStatus;
+
     // 后面都是get set
+    public String getMainInvoiceStatus() {
+        return mainInvoiceStatus;
+    }
+
+    public void setMainInvoiceStatus(String mainInvoiceStatus) {
+        this.mainInvoiceStatus = mainInvoiceStatus;
+    }
 }
