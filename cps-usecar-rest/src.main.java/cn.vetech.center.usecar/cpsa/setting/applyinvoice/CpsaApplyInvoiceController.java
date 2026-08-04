@@ -58,7 +58,13 @@ public class CpsaApplyInvoiceController extends CpsaBaseController {
      * CPS客服代申请
      */
     public static final String CPS_OPEN_INVOICE = "2";
+    /**
+     * 主单开票申请中
+     */
     private static final String MAIN_INVOICE_APPLYING = "1";
+    /**
+     * 主单已开票
+     */
     private static final String MAIN_INVOICE_APPLIED = "2";
     /**
      * 日志
@@ -74,6 +80,9 @@ public class CpsaApplyInvoiceController extends CpsaBaseController {
      */
     @Autowired
     private YcDdMainService ycDdMainService;
+    /**
+     * 用车订单扩展服务
+     */
     @Autowired
     private YcDdExService ycDdExService;
     /**
@@ -109,7 +118,7 @@ public class CpsaApplyInvoiceController extends CpsaBaseController {
         }
         if (isMainOrderInvoiced(ycDd.getpDdbh())) {
             RestResponse resp = new RestResponse();
-            resp.setMessage("main order " + ycDd.getpDdbh() + " has applied invoice, child order " + ddbh + " cannot apply again");
+            resp.setMessage("主单" + ycDd.getpDdbh() + "已申请开票，子单" + ddbh + "不能重复申请");
             resp.setResult(false);
             return resp;
         }
@@ -184,7 +193,7 @@ public class CpsaApplyInvoiceController extends CpsaBaseController {
 
         if (isMainOrderInvoiced(ycDd.getpDdbh())) {
             RestResponse resp = new RestResponse();
-            resp.setMessage("main order " + ddbh + " has applied invoice, cannot apply again");
+            resp.setMessage("主单" + ddbh + "已申请开票，不能重复申请");
             resp.setResult(false);
             return resp;
         }
@@ -215,10 +224,10 @@ public class CpsaApplyInvoiceController extends CpsaBaseController {
             //开票成功通知
             UseCarApplyInvoiceNotifyDTO useCarApplyInvoiceNotifyDTO = new UseCarApplyInvoiceNotifyDTO();
             useCarApplyInvoiceNotifyDTO.setCpbh(CPBH);
-            // Persist main invoice status before child orders check it.
+            // 主单开票成功后落状态，供关联子单申请开票时校验。
             if (!saveMainInvoiceStatus(ycDd.getpDdbh(), MAIN_INVOICE_APPLIED)) {
                 RestResponse resp = new RestResponse();
-                resp.setMessage("main order " + ddbh + " invoice status update failed");
+                resp.setMessage("主单" + ddbh + "开票状态更新失败");
                 resp.setResult(false);
                 return resp;
             }
@@ -235,6 +244,12 @@ public class CpsaApplyInvoiceController extends CpsaBaseController {
         return new RestResponse<>(true);
     }
 
+    /**
+     * 检查主单是否正在申请开票或已经开票。
+     *
+     * @param pDdbh 主单编号
+     * @return true=不可再次申请开票
+     */
     private boolean isMainOrderInvoiced(String pDdbh) {
         if (StringUtils.isBlank(pDdbh)) {
             return false;
@@ -247,6 +262,13 @@ public class CpsaApplyInvoiceController extends CpsaBaseController {
                 || StringUtils.equals(MAIN_INVOICE_APPLIED, ycDdEx.getMainInvoiceStatus());
     }
 
+    /**
+     * 保存主单开票状态。
+     *
+     * @param pDdbh  主单编号
+     * @param status 开票状态
+     * @return 是否保存成功
+     */
     private boolean saveMainInvoiceStatus(String pDdbh, String status) {
         if (StringUtils.isBlank(pDdbh)) {
             return false;

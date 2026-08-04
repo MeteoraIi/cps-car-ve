@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * <p>
- * Use car order extension service.
+ * 用车订单扩展表服务
  * </p>
  *
  * @author vetech
@@ -30,6 +30,13 @@ public class YcDdExService extends UsecarCacheBaseServiceImpl<YcDdExMapper, YcDd
         return this.baseMapper.updateById(ycDdEx);
     }
 
+    /**
+     * 只更新主单发票状态，避免覆盖扩展表其他字段。
+     *
+     * @param pDdbh             主单编号
+     * @param mainInvoiceStatus 主单发票状态
+     * @return 更新行数
+     */
     public int updateMainInvoiceStatus(String pDdbh, String mainInvoiceStatus) {
         if (StringUtils.isBlank(pDdbh)) {
             return 0;
@@ -38,7 +45,6 @@ public class YcDdExService extends UsecarCacheBaseServiceImpl<YcDdExMapper, YcDd
         ycDdEx.setMainInvoiceStatus(mainInvoiceStatus);
         EntityWrapper<YcDdEx> wrapper = new EntityWrapper<>();
         wrapper.eq("pddbh", pDdbh);
-        // Only update main_invoice_status, do not overwrite other extension fields.
         return this.baseMapper.update(ycDdEx, wrapper);
     }
 }
